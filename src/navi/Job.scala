@@ -26,19 +26,7 @@ case class Date(d: String) {
   def weekNumber = getWeekNumber
   override def toString = day + "/" + month + "/" + year
 
-  val monthDayNumber = Map(
-    1 -> 2,
-    2 -> 28,
-    3 -> 31,
-    4 -> 30,
-    5 -> 31,
-    6 -> 30,
-    7 -> 31,
-    8 -> 31,
-    9 -> 30,
-    10 -> 31,
-    11 -> 30,
-    12 -> 31)
+  val monthDayNumber = Map(1 -> 2, 2 -> 28, 3 -> 31, 4 -> 30, 5 -> 31, 6 -> 30, 7 -> 31, 8 -> 31, 9 -> 30, 10 -> 31, 11 -> 30, 12 -> 31)
 
   def getDayNumber = this.day + (1 until this.month).map(monthDayNumber).sum
   def getWeekNumber = getDayNumber / 7
