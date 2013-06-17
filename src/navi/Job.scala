@@ -59,15 +59,15 @@ object Calender {
 }
 
 /*
-     * 0 --> idClient
-     * 1 --> idVisite 
-	 * 2 --> page 
-	 * 3 --> IdCategorie 
-	 * 4 --> dateVisit 
-	 * 5 --> nbPage
-	 * 6 --> isFictif
-	 * 7 --> isAuthent -->
-     */
+ * 0 --> idClient
+ * 1 --> idVisite 
+ * 2 --> page 
+ * 3 --> IdCategorie 
+ * 4 --> dateVisit 
+ * 5 --> nbPage
+ * 6 --> isFictif
+ * 7 --> isAuthent
+ */
 
 case class Row(idClient: String, idVisite: String, page: String, IdCategorie: Int, dateVisit: Date, nbPage: Int, isFictif: Boolean, isAuthent: Boolean) {
   def this(fields: Array[String]) = this(
@@ -183,6 +183,8 @@ object Job extends App with timer {
   def save(clt: spark.RDD[navi.Client]) = clt.map(Client.parseToRaw).saveAsObjectFile(objFilePath)
 
   def task = {
+
+    // mongoDB solution
     val myFile = sc.textFile(tableFilePath)
     val data = myFile.map(line => line.split('\001')) //.map(new Row(_))
     val client_list = toClientAggInRawFormat(data)
@@ -205,6 +207,13 @@ object Job extends App with timer {
               "freq" -> a._3)))))
       }
     })
+
+    // object serialization solution
+    //    val clients = fromTableToRawAgg.map(Client.parseToClient)
+    //    val clients = load
+    //    val res = clients.map(clt => (clt.heat(1, 1, 1), clt.idClient)).sortByKey(false).map(p => p._2 + ";" + p._1)
+    //    res.saveAsTextFile(resFilePath)
+
   }
 
   def runTask = time(task)
